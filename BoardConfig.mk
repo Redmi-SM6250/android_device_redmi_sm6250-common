@@ -102,6 +102,9 @@ TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)
   TARGET_KERNEL_CONFIG := vendor/curtana_defconfig
   TARGET_KERNEL_CLANG_COMPILE := true
+  TARGET_KERNEL_CLANG_VERSION := 11.0
+  KERNEL_TOOLCHAIN := $(shell pwd)/prebuilts/clang/host/linux-x86/clang-11.0/bin
+  TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-gnu-
   TARGET_KERNEL_SOURCE := kernel/redmi/sm6250
 endif
 
