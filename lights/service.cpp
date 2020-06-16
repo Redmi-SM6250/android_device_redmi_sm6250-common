@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "android.hardware.light@2.0-service.redmi_curtana"
+#define LOG_TAG "android.hardware.light@2.0-service.redmi_sm6250"
 
 #include <hidl/HidlTransportSupport.h>
 

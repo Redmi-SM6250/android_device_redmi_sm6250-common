@@ -7,7 +7,7 @@
 
 set -e
 
-DEVICE=curtana
+DEVICE_COMMON=sm6250-common
 VENDOR=redmi
 
 # Load extract_utils and do some sanity checks
@@ -22,6 +22,12 @@ if [ ! -f "${HELPER}" ]; then
     exit 1
 fi
 source "${HELPER}"
+
+# Default to sanitizing the vendor folder before extraction
+CLEAN_VENDOR=true
+
+SECTION=
+KANG=
 
 while [ "${#}" -gt 0 ]; do
     case "${1}" in
@@ -46,10 +52,19 @@ if [ -z "${SRC}" ]; then
     SRC="adb"
 fi
 
-# Initialize the helper
-setup_vendor "${DEVICE}" "${VENDOR}" "${LINEAGE_ROOT}" false "${CLEAN_VENDOR}"
+# Initialize the helper for common device
+setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${LINEAGE_ROOT}" true "${CLEAN_VENDOR}"
 
 extract "${MY_DIR}/proprietary-files.txt" "${SRC}" \
         "${KANG}" --section "${SECTION}"
+        
+if [ -s "${MY_DIR}/../${DEVICE}/proprietary-files.txt" ]; then
+    # Reinitialize the helper for device
+    source "${MY_DIR}/../${DEVICE}/extract-files.sh"
+    setup_vendor "${DEVICE}" "${VENDOR}" "${LINEAGE_ROOT}" false "${CLEAN_VENDOR}"
+
+    extract "${MY_DIR}/../${DEVICE}/proprietary-files.txt" "${SRC}" \
+            "${KANG}" --section "${SECTION}"
+fi
 
 "${MY_DIR}/setup-makefiles.sh"
