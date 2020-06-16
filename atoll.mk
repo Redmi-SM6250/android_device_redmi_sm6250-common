@@ -4,6 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Inherit from the common Open Source product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
@@ -11,7 +15,7 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
 # Get non-open-source specific aspects
-$(call inherit-product-if-exists, vendor/redmi/curtana/curtana-vendor.mk)
+$(call inherit-product, vendor/redmi/sm6250-common/sm6250-common-vendor.mk)
 
 -include $(LOCAL_PATH)/product_prop.mk
 
@@ -78,7 +82,7 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.redmi_curtana
+    android.hardware.light@2.0-service.redmi_sm6250
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -105,7 +109,7 @@ PRODUCT_COPY_FILES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.2-service.curtana
+    android.hardware.power@1.2-service.redmi_sm6250
     
 # Soong
 PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)

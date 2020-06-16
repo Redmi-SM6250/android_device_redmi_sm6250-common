@@ -7,7 +7,7 @@
 
 set -e
 
-DEVICE=curtana
+DEVICE_COMMON=sm6250-common
 VENDOR=redmi
 
 INITIAL_COPYRIGHT_YEAR=2020
@@ -25,16 +25,26 @@ if [ ! -f "${HELPER}" ]; then
 fi
 source "${HELPER}"
 
-# Initialize the helper
-setup_vendor "${DEVICE}" "${VENDOR}" "${LINEAGE_ROOT}"
+# Initialize the helper for common
+setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${LINEAGE_ROOT}" true
 
 # Copyright headers and guards
-write_headers
+write_headers "curtana excalibur joyeuse"
 
+# The standard common blobs
 write_makefiles "${MY_DIR}/proprietary-files.txt" true
 
-cat << EOF >> "$ANDROIDMK"
-EOF
+if [ -s "${MY_DIR}/../${DEVICE}/proprietary-files.txt" ]; then
+    # Reinitialize the helper for device
+    INITIAL_COPYRIGHT_YEAR="$DEVICE_BRINGUP_YEAR"
+    setup_vendor "${DEVICE}" "${VENDOR}" "${LINEAGE_ROOT}" false
 
-# Finish
-write_footers
+    # Copyright headers and guards
+    write_headers
+
+    # The standard device blobs
+    write_makefiles "${MY_DIR}/../${DEVICE}/proprietary-files.txt" true
+
+    # Finish
+    write_footers
+fi
